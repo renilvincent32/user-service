@@ -19,8 +19,8 @@
 ## How to run the application ?
 
 - Checkout the code
-- run `mvn clean package` on the root directory of the project
-- Once the build is successful, run `docker-compose up` on the root directory of the project
+- run `mvn clean package` on the root directory of the project, to build the project JAR
+- Once the build is successful, run `docker-compose up` on the root directory of the project, to make sure docker containers are up and running
 - After this step, the application is running at http://localhost:8080
 - Open Postman (or similar tools) and perform various operations mentioned above
 
@@ -67,4 +67,9 @@
 
 - All the APIs have been unit-tested at controller level.
 - Did not write integration test cases, due to the added complexity. Performed integration tests using Postman only.
+
+## Cleanup
+
+- run `docker-compose down` at the project root directory, to remove both app and postgres docker containers
+- run `docker rmi user-app` to remove the docker image for the application
 
