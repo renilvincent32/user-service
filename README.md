@@ -13,15 +13,16 @@
 ## Preconditions
 
 - Maven has to be installed
-- Docker has to be installed, and running
+- Docker and Docker compose has to be installed, and running
 - Postman (or similar REST clients) is required
+- Postgres container runs on port 5432 and application runs on port 8080. So please make sure these ports are free to bind
 
 ## How to run the application ?
 
 - Checkout the code
 - run `mvn clean package` on the root directory of the project, to build the project JAR
 - Once the build is successful, run `docker-compose up` on the root directory of the project, to make sure docker containers are up and running
-- After this step, the application is running at http://localhost:8080
+- After this step, the application should be running at http://localhost:8080
 - Open Postman (or similar tools) and perform various operations mentioned above
 
 ## REST APIs
