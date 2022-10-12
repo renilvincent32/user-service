@@ -1,6 +1,7 @@
 package org.fimohealth.user.controller;
 
 import org.fimohealth.user.domain.Error;
+import org.fimohealth.user.domain.LoginRequest;
 import org.fimohealth.user.domain.Users;
 import org.fimohealth.user.repository.UserRepository;
 import org.fimohealth.user.validation.ValidateOnPatch;
@@ -83,9 +84,10 @@ public class UserController {
         });
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestParam("email") String email, @RequestParam("password") String password) {
-        boolean successfulLogin = repository.findByEmailAndPassword(email, encodePassword(password)).isPresent();
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
+        boolean successfulLogin = repository.findByEmailAndPassword(loginRequest.getEmail(),
+                encodePassword(loginRequest.getPassword())).isPresent();
         LOGGER.info("Login Successful: " + successfulLogin);
         return successfulLogin ? ResponseEntity.status(HttpStatus.OK).body("Login Successful!")
                 : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed!");

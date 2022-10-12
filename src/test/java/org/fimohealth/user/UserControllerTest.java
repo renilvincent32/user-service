@@ -2,6 +2,7 @@ package org.fimohealth.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fimohealth.user.controller.UserController;
+import org.fimohealth.user.domain.LoginRequest;
 import org.fimohealth.user.domain.Users;
 import org.fimohealth.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -138,15 +139,17 @@ public class UserControllerTest {
     @Test
     public void test_login_successful() throws Exception {
         //GIVEN
+        ObjectMapper mapper = new ObjectMapper();
         String encodedPassword = Base64.getEncoder().encodeToString("password".getBytes());
         Users existingUser = new Users().setAge(33).setPassword("password").setEmail("user@test.com");
         when(repository.findByEmailAndPassword("user@test.com", encodedPassword))
                 .thenReturn(Optional.of(existingUser));
+        LoginRequest loginRequest = new LoginRequest().setEmail("user@test.com").setPassword("password");
 
         //WHEN
-        MvcResult mvcResult = mockMvc.perform(get("/api/user/login")
-                        .param("email", "user@test.com")
-                        .param("password", "password"))
+        MvcResult mvcResult = mockMvc.perform(post("/api/user/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -157,15 +160,17 @@ public class UserControllerTest {
     @Test
     public void test_login_failed() throws Exception {
         //GIVEN
+        ObjectMapper mapper = new ObjectMapper();
         String encodedPassword = Base64.getEncoder().encodeToString("password1".getBytes());
         Users existingUser = new Users().setAge(33).setPassword("password").setEmail("user@test.com");
         when(repository.findByEmailAndPassword("user@test.com", encodedPassword))
                 .thenReturn(Optional.of(existingUser));
+        LoginRequest loginRequest = new LoginRequest().setEmail("user@test.com").setPassword("password");
 
         //WHEN
-        MvcResult mvcResult = mockMvc.perform(get("/api/user/login")
-                        .param("email", "user@test.com")
-                        .param("password", "password"))
+        MvcResult mvcResult = mockMvc.perform(post("/api/user/login")
+                        .content(mapper.writeValueAsString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
 
